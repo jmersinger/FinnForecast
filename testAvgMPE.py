@@ -8,7 +8,7 @@ def calculate_Avg_MPE(forecast_length, test_range):
     MPEs = []
     index = 0
     for ticker in tickers.iloc:
-        if index == 100: break
+        if index == test_range: break
         stock_data = fsd.fetch_and_clean(ticker, 'N')
         if stock_data.empty:
             yfin_stocks = yfin_stocks[yfin_stocks['Ticker'] != ticker]
