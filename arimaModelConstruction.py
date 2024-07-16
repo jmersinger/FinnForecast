@@ -27,8 +27,8 @@ def arima_forecast_test(data, forecast_length):
     
     #Calculate MSE
     mse = mean_squared_error(test, forecast_df['Forecast'])
-    print(f"Mean Squared Error (MSE): {mse}")
     
     #Calculate MPE
     mpe = mean_percentage_error(test, forecast_df['Forecast'])
-    print(f"Mean Percentage Error (MPE): {mpe}%")
+    
+    return mse, mpe

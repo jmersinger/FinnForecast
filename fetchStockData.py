@@ -4,7 +4,10 @@ import pandas as pd
 
 def fetch_and_clean(ticker, print_csv):
     #Download & Clean Stock Data
-    stock_data = yf.download(ticker, period="max", interval="1mo")
+    try:
+        stock_data = yf.download(ticker, period="max", interval="1mo", progress=False)
+    except KeyError as e:
+        print(f"Error: {e}. Ticker symbol '{ticker}' not found or invalid.")
     if (print_csv == "Y"):
         stock_data.to_csv(f'./stockData/{ticker}.csv')   
     stock_data = stock_data.dropna()
