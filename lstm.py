@@ -15,7 +15,7 @@ def create_sequences(data, seq_length):
             ys.append(y)
         return np.array(xs), np.array(ys)
 
-def lstm_model_fit(data, forecast_length, test):
+def lstm_model_fit(data, forecast_length):
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
 
@@ -49,19 +49,3 @@ def lstm_model_fit(data, forecast_length, test):
 
     lstm_forecast = scaler.inverse_transform(np.array(lstm_forecast).reshape(-1, 1)).flatten()
     return lstm_forecast
-    
-def wa_hybrid_model_test(arima, lstm, test):
-    least_mpe = 100    
-    weighted_average = 0
-    weighted_avg_ratio = 0
-    for i in range(1, 1000):
-        ratio = i / 1000
-        test_ratio = ratio * arima['Forecast'] + (1-ratio) * lstm
-        mse_test, mpe_test = amc.test_fit(test_ratio, test)
-        
-        if (abs(mpe_test) < abs(least_mpe)):
-            least_mpe = mpe_test
-            weighted_average = test_ratio
-            weighted_avg_ratio = i/1000
-
-    return weighted_average, weighted_avg_ratio

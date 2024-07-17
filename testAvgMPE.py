@@ -1,6 +1,7 @@
 import fetchStockData as fsd
 import arimaModelConstruction as amc
 import lstm
+import hybridModel as hm
 import pandas as pd
 
 def calculate_averages(mse_list, mpe_list):
@@ -71,7 +72,7 @@ def average_measure_fits(forecast_length, test_range):
 
 
         #Calculate minimzed mpe Hybrid Forecast
-        hybrid_forecast, hybrid_ratio = lstm.wa_hybrid_model_test(arima_forecast, lstm_forecast, test)
+        hybrid_forecast, hybrid_ratio = hm.wa_hybrid_model_test(arima_forecast, lstm_forecast, test)
         
         #Calculate and validate Measures of fit
         mse_arima, mpe_arima = amc.test_fit(arima_forecast['Forecast'], test)
