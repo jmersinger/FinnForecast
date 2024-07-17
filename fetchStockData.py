@@ -1,6 +1,9 @@
 import yfinance as yf
 import pandas as pd
 
+def delete_record(df, record_pk, filter_val, file):
+    df = df[df[record_pk] != filter_val]
+    df.to_csv(file)
 
 def fetch_and_clean(ticker, print_csv):
     #Download & Clean Stock Data
