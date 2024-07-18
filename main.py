@@ -34,18 +34,18 @@ def main():
     
     
     # print(fitTest.calculate_Avg_MPE(12, 100))
-    # fitTest.average_measure_fits(12, 10)
+    fitTest.average_measure_fits(12, 100)
     
     # print("Hello! Welcome to FinnForecast! Please select an option:")
     # print("(1) Create a forecast\n")
     # print("(2) Test model accuracy")
     
-    arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast('TSLA', 24)
-    print(arima_forecast)
-    print("\n\n\n")
-    print(lstm_forecast)
-    print("\n\n\n")
-    print(hybrid_forecast)
+    # arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast('TSLA', 24)
+    # print(arima_forecast)
+    # print("\n\n\n")
+    # print(lstm_forecast)
+    # print("\n\n\n")
+    # print(hybrid_forecast)
 
     
 
