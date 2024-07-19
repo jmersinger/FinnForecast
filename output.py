@@ -1,6 +1,7 @@
 import os
 
 def output_to_folder(ticker, stock_data, arima, lstm, hybrid, plot_all, plot_arima, plot_lstm, plot_hybrid):
+    #Create output directory
     path = "./output"
     output_folder_name = os.path.join(path, f"{ticker}_forecast")
     i = 1
@@ -9,12 +10,14 @@ def output_to_folder(ticker, stock_data, arima, lstm, hybrid, plot_all, plot_ari
         i += 1
     os.makedirs(output_folder_name)
     
+    #Create plots directory
     plot_folder_name = os.path.join(output_folder_name, f"{ticker}_plots")
     while os.path.exists(plot_folder_name):
         plot_folder_name = os.path.join(path, f"{ticker}_plots_{i}")
         i += 1
     os.makedirs(plot_folder_name)
     
+    #Save outputs to folder
     stock_data.to_csv(f'{output_folder_name}/{ticker}_raw_data.csv')
     arima.to_csv(f'{output_folder_name}/{ticker}_arima_forecast.csv')
     lstm.to_csv(f'{output_folder_name}/{ticker}_lstm_forecast.csv')
@@ -27,6 +30,7 @@ def output_to_folder(ticker, stock_data, arima, lstm, hybrid, plot_all, plot_ari
     return output_folder_name
 
 def test_output(avg_mse_arima, avg_mpe_arima, abs_avg_mpe_arima, bff_arima, avg_mse_lstm, avg_mpe_lstm, abs_avg_mpe_lstm, bff_lstm, avg_hybrid_ratio, avg_mse_hybrid, avg_mpe_hybrid, abs_avg_mpe_hybrid, bff_hybrid):
+    #Create output directory
     path = "./output"
     output_folder_name = os.path.join(path, "test_output")
     i = 1
@@ -35,6 +39,7 @@ def test_output(avg_mse_arima, avg_mpe_arima, abs_avg_mpe_arima, bff_arima, avg_
         i += 1
     os.makedirs(output_folder_name)
     
+    #Save output to folder
     with open(f'{output_folder_name}/test_output.txt', 'w') as file:
         print("ARIMA Model Fit:", file=file)
         print(f"Mean Squared Error (MSE): {avg_mse_arima}", file=file)

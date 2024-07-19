@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 
+#Function to create sequences for model
 def create_sequences(data, seq_length):
         xs, ys = [], []
         for i in range(len(data)-seq_length):
@@ -12,9 +13,11 @@ def create_sequences(data, seq_length):
         return np.array(xs), np.array(ys)
 
 def lstm_model_fit(data, forecast_length, sequence_length, batch_size, epochs):
+    #Scale data for analysis
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
 
+    #Ensure sequence length isn't larger than data
     if (len(data) >= sequence_length):
         X, y = create_sequences(scaled_data, sequence_length)
     else:
@@ -48,5 +51,6 @@ def lstm_model_fit(data, forecast_length, sequence_length, batch_size, epochs):
         current_sequence = np.roll(current_sequence, -1)
         current_sequence[-1] = lstm_prediction
 
+    #Return data to original scale
     lstm_forecast = scaler.inverse_transform(np.array(lstm_forecast).reshape(-1, 1)).flatten()
     return lstm_forecast

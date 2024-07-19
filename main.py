@@ -1,6 +1,6 @@
 import params
 import testAvgMPE as test
-import modes
+import forecast
 
 
 def main():
@@ -12,6 +12,8 @@ def main():
     
     end = False
     while end == False:
+        
+        ###Main Menu###
         end = "Invalid"
         print("=============Menu==============")
         print("(1) Create a simple forecast")
@@ -29,7 +31,7 @@ def main():
                 print("[Error]: Invalid input. Please enter a number 1-5.")
                 continue   
             
-                 
+            ###Simple Forecast###
             if mode == 1:
                 print("Okay, lets make a simple forecast.")
                 print("If you change your mind, just enter 'cancel' at any time to return to the menu.")
@@ -38,9 +40,9 @@ def main():
                     valid_input=True
                     end=False
                     continue
-                modes.forecast(ticker, stock_data, forecast_length)
+                forecast.forecast(ticker, stock_data, forecast_length)
                 
-                
+            ###Advanced Forecast###
             elif mode == 2:            
                 print("Okay, lets make an advanced forecast.")
                 print("If you change your mind, just enter 'cancel' at any time to return to the menu.")
@@ -54,9 +56,9 @@ def main():
                     valid_input=True
                     end=False
                     continue
-                modes.forecast(ticker, stock_data, forecast_length, sequence_length, batch_size, epochs, step)
+                forecast.forecast(ticker, stock_data, forecast_length, sequence_length, batch_size, epochs, step)
                 
-                
+            ###Simple Test###
             elif mode == 3:
                 print("Okay, lets run a simple test.")
                 print("If you change your mind, just enter 'cancel' at any time to return to the menu.")
@@ -67,6 +69,7 @@ def main():
                     continue
                 test.average_measure_fits(forecast_length, test_range)
                 
+            ###Advanced Test###
             elif mode == 4:
                 print("Okay, lets run a simple test.")
                 print("If you change your mind, just enter 'cancel' at any time to return to the menu.")

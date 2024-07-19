@@ -1,5 +1,6 @@
 import fetchStockData as fsd
 
+### Function to check if user wants to cancel mode selection ###
 def check_cancel(var1=0, var2=0, var3=0, var4=0, var5=0, var6=0, var7=0):
     try:
         if var1 == "cancel" or var2 == "cancel" or var3 == "cancel" or var4 == "cancel" or var5 == "cancel" or var6 == "cancel" or var7 == "cancel":
@@ -8,7 +9,8 @@ def check_cancel(var1=0, var2=0, var3=0, var4=0, var5=0, var6=0, var7=0):
             return False
     except ValueError:
         return False
-    
+
+### Get parameters for simple forecast ###
 def get_simple_params():
     valid_input = False
     while valid_input == False:
@@ -57,9 +59,12 @@ def get_simple_params():
             
     return ticker, stock_data, forecast_length
 
+### Get parameters for advanced forecast ###
 def get_advanced_params(stock_data):
     valid_input = False
     while valid_input == False:
+        
+        #Get sequence length
         sequence_length = input("Please enter a sequence length: ")
         try:
             if sequence_length.lower() == "cancel":
@@ -84,6 +89,8 @@ def get_advanced_params(stock_data):
             valid_input = True                    
     valid_input = False
     while valid_input == False:
+        
+        #Get batch size
         batch_size = input("Please enter a batch size: ")
         try:
             if batch_size.lower() == "cancel":
@@ -106,6 +113,8 @@ def get_advanced_params(stock_data):
                 
     valid_input = False
     while valid_input == False:
+        
+        #Get amount of epochs
         epochs = input("Please enter an amount of epochs: ")
         try:
             if epochs.lower() == "cancel":
@@ -129,6 +138,7 @@ def get_advanced_params(stock_data):
     valid_input = False
     while valid_input == False:
                 
+        #Get amount of steps
         step = input("Please enter a weighted average step size: ")
         try:
             if step.lower() == "cancel":
@@ -150,6 +160,8 @@ def get_advanced_params(stock_data):
             valid_input = True
     return sequence_length, batch_size, epochs, step
 
+
+###Function to get parameters for simple test###
 def get_simple_test_params():
     # Get forecast length and forecast
     valid_input = False
@@ -174,7 +186,7 @@ def get_simple_test_params():
             
     valid_input = False
     while valid_input == False:
-                
+        #Get amount of stocks to run in test
         test_range = input("How many stocks would you like to test?: ")
         try:
             if test_range.lower() == "cancel":
@@ -194,9 +206,11 @@ def get_simple_test_params():
             valid_input = True
     return forecast_length, test_range
 
+###Function to get parameters for advanced test###
 def get_advanced_test_params():
     valid_input = False
     while valid_input == False:
+        #Get sequence length
         sequence_length = input("Please enter a sequence length: ")
         try:
             if sequence_length.lower() == "cancel":
@@ -218,6 +232,8 @@ def get_advanced_test_params():
             valid_input = True                    
     valid_input = False
     while valid_input == False:
+        
+        #Get batch size
         batch_size = input("Please enter a batch size: ")
         try:
             if batch_size.lower() == "cancel":
@@ -240,6 +256,8 @@ def get_advanced_test_params():
                 
     valid_input = False
     while valid_input == False:
+        
+        #Get amount of epochs
         epochs = input("Please enter an amount of epochs: ")
         try:
             if epochs.lower() == "cancel":
@@ -262,7 +280,8 @@ def get_advanced_test_params():
                         
     valid_input = False
     while valid_input == False:
-                
+        
+        #Get amount of steps
         step = input("Please enter a weighted average step size: ")
         try:
             if step.lower() == "cancel":

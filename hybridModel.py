@@ -1,6 +1,7 @@
 import arimaModelConstruction as amc
 import lstm
 
+#Function to find the optimal weights for hybrid model
 def wa_hybrid_model_test(arima, lstm, test, step):
     least_mpe = 100    
     weighted_average_forecast = 0
