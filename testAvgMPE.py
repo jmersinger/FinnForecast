@@ -49,7 +49,7 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
         ): break
         
         # Fetch stock ticker data
-        stock_data = fsd.fetch_and_clean(ticker, 'N')
+        stock_data, output_path = fsd.fetch_and_clean(ticker, 'N')
         if stock_data.empty or stock_data.shape[0] <= 12:
             print(f"Deleting {ticker}...")
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
@@ -126,7 +126,7 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
     bff_hybrid = (len(bffs_hybrid)/test_range) * 100
     
     #print to file
-    with open('test_output.txt', 'w') as file:
+    with open(f'{output_path}/test_output.txt', 'w') as file:
         print("ARIMA Model Fit:", file=file)
         print(f"Mean Squared Error (MSE): {avg_mse_arima}", file=file)
         print(f"Mean Percentage Error (MPE): {avg_mpe_arima}%", file=file)

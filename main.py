@@ -34,20 +34,20 @@ def main():
     print('\n')
     print('\n')
     print("Hello! Welcome to FinnForecast! Please select an option:")
-    print("(1) Create a forecast")
-    print("(2) Test model accuracy")
+    print("(1) Create a simple forecast")
+    print("(2) Create an advanced forecast")
+    print("(3) Run a simple test")
+    print("(4) Run an advanced test")
     mode = input()
     
     if mode == '1':
-        print("Okay, lets make a forecast.")
-        print("If you change your mind, just enter 'cancel' for any prompt to return to the menu")
+        print("Okay, lets make a simple forecast.")
+        print("If you change your mind, just enter 'cancel' at any time to return to the menu.")
         # Ticker Selection
         ticker = input("Please enter the stock ticker you want to forecast: ")
         print_csv = input("Would you like to save to raw stock data? (Y/N): ")
-        forecast_length = int(input(f"How long (in months) do you want to forecast {ticker}: "))
-        sequence_length = int(input(f"How many months of {ticker} do you want to be analyzed? (If you would like the entire data, enter 'all' **This might slow down the program**)"))
-        
-        arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast(ticker, print_csv, forecast_length, sequence_length)
+        forecast_length = int(input(f"How long (in months) do you want to forecast {ticker}: "))        
+        arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast(ticker, print_csv, forecast_length)
         
         print("ARIMA Forecast:")
         print(arima_forecast)
