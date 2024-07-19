@@ -1,9 +1,6 @@
-import arimaModelConstruction as amc
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
-import os
 
 def create_sequences(data, seq_length):
         xs, ys = [], []
@@ -14,7 +11,7 @@ def create_sequences(data, seq_length):
             ys.append(y)
         return np.array(xs), np.array(ys)
 
-def lstm_model_fit(data, forecast_length, sequence_length=24, batch_size=32, epochs=50):
+def lstm_model_fit(data, forecast_length, sequence_length, batch_size, epochs):
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
 
@@ -24,6 +21,7 @@ def lstm_model_fit(data, forecast_length, sequence_length=24, batch_size=32, epo
         print("[Warning]: Sequence Length larger than available data!")
         print("[Warning]: Forecasting using all available data...")
         sequence_length = len(data)
+        X, y = create_sequences(scaled_data, sequence_length)
 
     # Define LSTM model
     model = tf.keras.Sequential([
@@ -36,7 +34,7 @@ def lstm_model_fit(data, forecast_length, sequence_length=24, batch_size=32, epo
 
     # Train LSTM model
     try:
-        model.fit(X, y, epochs, batch_size, verbose=0)
+        model.fit(X, y, epochs=epochs, batch_size=batch_size, verbose=0)
     except ValueError as ve:
         print(f"ValueError during model training: {ve}")
         return None

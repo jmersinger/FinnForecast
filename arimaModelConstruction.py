@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error
 
 def split_training_data(data, forecast_length):
-    train, test = train_test_split(data['Close'], train_size=(data.shape[0]-forecast_length))
+    train, test = train_test_split(data['Close'], train_size=(int(data.shape[0]-forecast_length)))
     return train, test
 
 def mean_percentage_error(y_true, y_pred):

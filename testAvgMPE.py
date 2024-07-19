@@ -2,6 +2,7 @@ import fetchStockData as fsd
 import arimaModelConstruction as amc
 import lstm
 import hybridModel as hm
+import output
 import pandas as pd
 
 def calculate_averages(mse_list, mpe_list):
@@ -14,7 +15,7 @@ def average(list):
     avg = sum(list)/len(list)
     return avg
 
-def average_measure_fits(forecast_length, sequence_length, test_range):
+def average_measure_fits(forecast_length, test_range, sequence_length=48, batch_size=64, epochs=75, step=100):
     
     # Initalize Fit Lists
     mses_arima = []
@@ -49,7 +50,7 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
         ): break
         
         # Fetch stock ticker data
-        stock_data, output_path = fsd.fetch_and_clean(ticker, 'N')
+        stock_data = fsd.fetch_and_clean(ticker)
         if stock_data.empty or stock_data.shape[0] <= 12:
             print(f"Deleting {ticker}...")
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
@@ -64,7 +65,7 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
         print(f"[{ticker}]: ARIMA Forecast complete...")
 
         # Constuct LSTM Forecast
-        lstm_forecast = lstm.lstm_model_fit(train, forecast_length, sequence_length)
+        lstm_forecast = lstm.lstm_model_fit(train, forecast_length, sequence_length, batch_size, epochs)
         if lstm_forecast is None:
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
             continue
@@ -72,7 +73,7 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
 
 
         #Calculate minimzed mpe Hybrid Forecast
-        hybrid_forecast, hybrid_ratio = hm.wa_hybrid_model_test(arima_forecast, lstm_forecast, test)
+        hybrid_forecast, hybrid_ratio = hm.wa_hybrid_model_test(arima_forecast, lstm_forecast, test, step)
         
         #Calculate and validate Measures of fit
         mse_arima, mpe_arima = amc.test_fit(arima_forecast['Forecast'], test)
@@ -126,45 +127,29 @@ def average_measure_fits(forecast_length, sequence_length, test_range):
     bff_hybrid = (len(bffs_hybrid)/test_range) * 100
     
     #print to file
-    with open(f'{output_path}/test_output.txt', 'w') as file:
-        print("ARIMA Model Fit:", file=file)
-        print(f"Mean Squared Error (MSE): {avg_mse_arima}", file=file)
-        print(f"Mean Percentage Error (MPE): {avg_mpe_arima}%", file=file)
-        print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_arima}%", file=file)
-        print(f"Best Fit Frequency: {bff_arima}%", file=file)
-        print("\n", file=file)
-        print("LSTM Model Fit:")
-        print(f"Mean Squared Error (MSE): {avg_mse_lstm}", file=file)
-        print(f"Mean Percentage Error (MPE): {avg_mpe_lstm}%", file=file)
-        print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_lstm}%", file=file)
-        print(f"Best Fit Frequency: {bff_lstm}%", file=file)
-        print("\n", file=file)
-        print("Hybrid Model Fit:", file=file)
-        print(f"Average Weighted Average Ratio: {avg_hybrid_ratio} to ARIMA", file=file)
-        print(f"Mean Squared Error (MSE): {avg_mse_hybrid}", file=file)
-        print(f"Mean Percentage Error (MPE): {avg_mpe_hybrid}%", file=file)
-        print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_hybrid}%", file=file)
-        print(f"Best Fit Frequency: {bff_hybrid}%", file=file)
+    path = output.test_output(avg_mse_arima, avg_mpe_arima, abs_avg_mpe_arima, bff_arima, avg_mse_lstm, avg_mpe_lstm, abs_avg_mpe_lstm, bff_lstm, avg_hybrid_ratio, avg_mse_hybrid, avg_mpe_hybrid, abs_avg_mpe_hybrid, bff_hybrid)
 
-    print("\n")
-    print(f"{forecast_length}-Stock Fit Test Summary:")
-    print("ARIMA Model Fit:")
-    print(f"Mean Squared Error (MSE): {avg_mse_arima}")
-    print(f"Mean Percentage Error (MPE): {avg_mpe_arima}%")
-    print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_arima}%")
-    print(f"Best Fit Frequency: {bff_arima}%")
+    print(f'[Complete!]: Output printed to {path}')
+
+    # print("\n")
+    # print(f"{forecast_length}-Stock Fit Test Summary:")
+    # print("ARIMA Model Fit:")
+    # print(f"Mean Squared Error (MSE): {avg_mse_arima}")
+    # print(f"Mean Percentage Error (MPE): {avg_mpe_arima}%")
+    # print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_arima}%")
+    # print(f"Best Fit Frequency: {bff_arima}%")
     
-    print("\n")
-    print("LSTM Model Fit:")
-    print(f"Mean Squared Error (MSE): {avg_mse_lstm}")
-    print(f"Mean Percentage Error (MPE): {avg_mpe_lstm}%")
-    print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_lstm}%")
-    print(f"Best Fit Frequency: {bff_lstm}%")
-    print("\n")
-    print("Hybrid Model Fit:")
-    print(f"Average Weighted Average Ratio: {avg_hybrid_ratio} to ARIMA")
-    print(f"Mean Squared Error (MSE): {avg_mse_hybrid}")
-    print(f"Mean Percentage Error (MPE): {avg_mpe_hybrid}%")
-    print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_hybrid}%")
-    print(f"Best Fit Frequency: {bff_hybrid}%")
-    print("\n")
+    # print("\n")
+    # print("LSTM Model Fit:")
+    # print(f"Mean Squared Error (MSE): {avg_mse_lstm}")
+    # print(f"Mean Percentage Error (MPE): {avg_mpe_lstm}%")
+    # print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_lstm}%")
+    # print(f"Best Fit Frequency: {bff_lstm}%")
+    # print("\n")
+    # print("Hybrid Model Fit:")
+    # print(f"Average Weighted Average Ratio: {avg_hybrid_ratio} to ARIMA")
+    # print(f"Mean Squared Error (MSE): {avg_mse_hybrid}")
+    # print(f"Mean Percentage Error (MPE): {avg_mpe_hybrid}%")
+    # print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_hybrid}%")
+    # print(f"Best Fit Frequency: {bff_hybrid}%")
+    # print("\n")
