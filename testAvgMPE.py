@@ -14,7 +14,7 @@ def average(list):
     avg = sum(list)/len(list)
     return avg
 
-def average_measure_fits(forecast_length, test_range):
+def average_measure_fits(forecast_length, sequence_length, test_range):
     
     # Initalize Fit Lists
     mses_arima = []
@@ -64,7 +64,7 @@ def average_measure_fits(forecast_length, test_range):
         print(f"[{ticker}]: ARIMA Forecast complete...")
 
         # Constuct LSTM Forecast
-        lstm_forecast = lstm.lstm_model_fit(train, forecast_length)
+        lstm_forecast = lstm.lstm_model_fit(train, forecast_length, sequence_length)
         if lstm_forecast is None:
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
             continue
@@ -147,6 +147,7 @@ def average_measure_fits(forecast_length, test_range):
         print(f"Best Fit Frequency: {bff_hybrid}%", file=file)
 
     print("\n")
+    print(f"{forecast_length}-Stock Fit Test Summary:")
     print("ARIMA Model Fit:")
     print(f"Mean Squared Error (MSE): {avg_mse_arima}")
     print(f"Mean Percentage Error (MPE): {avg_mpe_arima}%")

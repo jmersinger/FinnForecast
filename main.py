@@ -1,11 +1,5 @@
-import fetchStockData as fsd
-import arimaModelConstruction as amc
 import testAvgMPE as fitTest
-import lstm
 import hybridModel as hm
-
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 # from models import Sequential
@@ -34,11 +28,43 @@ def main():
     
     
     # print(fitTest.calculate_Avg_MPE(12, 100))
-    fitTest.average_measure_fits(12, 100)
+    # fitTest.average_measure_fits(12, 48, 20)
+    print('\n')
+    print('\n')
+    print('\n')
+    print('\n')
+    print("Hello! Welcome to FinnForecast! Please select an option:")
+    print("(1) Create a forecast")
+    print("(2) Test model accuracy")
+    mode = input()
     
-    # print("Hello! Welcome to FinnForecast! Please select an option:")
-    # print("(1) Create a forecast\n")
-    # print("(2) Test model accuracy")
+    if mode == '1':
+        print("Okay, lets make a forecast.")
+        print("If you change your mind, just enter 'cancel' for any prompt to return to the menu")
+        # Ticker Selection
+        ticker = input("Please enter the stock ticker you want to forecast: ")
+        print_csv = input("Would you like to save to raw stock data? (Y/N): ")
+        forecast_length = int(input(f"How long (in months) do you want to forecast {ticker}: "))
+        sequence_length = int(input(f"How many months of {ticker} do you want to be analyzed? (If you would like the entire data, enter 'all' **This might slow down the program**)"))
+        
+        arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast(ticker, print_csv, forecast_length, sequence_length)
+        
+        print("ARIMA Forecast:")
+        print(arima_forecast)
+        print('\n')
+        print("LSTM Forecast:")
+        print(lstm_forecast)
+        print('\n')
+        print("Hybrid Forecast:")
+        print(hybrid_forecast)
+        print('\n')
+
+
+        
+    elif mode == '2':
+        print("Okay, lets test.")
+    else:
+        print("Invaild selection. Please select and option (1 or 2).")
     
     # arima_forecast, lstm_forecast, hybrid_forecast = hm.hybrid_forecast('TSLA', 24)
     # print(arima_forecast)

@@ -4,7 +4,6 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 def create_sequences(data, seq_length):
         xs, ys = [], []
@@ -15,12 +14,17 @@ def create_sequences(data, seq_length):
             ys.append(y)
         return np.array(xs), np.array(ys)
 
-def lstm_model_fit(data, forecast_length):
+def lstm_model_fit(data, forecast_length, sequence_length):
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
 
-    seq_length = 10  # Example sequence length
-    X, y = create_sequences(scaled_data, seq_length)
+    if (len(scaled_data) >= sequence_length):
+        seq_length = sequence_length
+        X, y = create_sequences(scaled_data, seq_length)
+    else:
+        print("Warning: Sequence Length larger than available data!")
+        print("Warning: Forecasting using all available data...")
+        seq_length = len(scaled_data)
 
     # Define LSTM model
     model = tf.keras.Sequential([

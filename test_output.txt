@@ -1,19 +1,19 @@
 ARIMA Model Fit:
-Mean Squared Error (MSE): 1406.459293460205
-Mean Percentage Error (MPE): -3.336189110183477%
-Absolute Mean Percentage Error (MPE): 22.442577780805994%
-Best Fit Frequency: 57.99999999999999%
+Mean Squared Error (MSE): 195.97994485456613
+Mean Percentage Error (MPE): -8.332437233339872%
+Absolute Mean Percentage Error (MPE): 12.628674771551825%
+Best Fit Frequency: 50.0%
 
 
-Mean Squared Error (MSE): 1566.1663929946078
-Mean Percentage Error (MPE): -0.9710967514303426%
-Absolute Mean Percentage Error (MPE): 111.73177960798914%
-Best Fit Frequency: 19.0%
+Mean Squared Error (MSE): 348.0004512637107
+Mean Percentage Error (MPE): -6.28221120752505%
+Absolute Mean Percentage Error (MPE): 15.979131451698887%
+Best Fit Frequency: 25.0%
 
 
 Hybrid Model Fit:
-Average Weighted Average Ratio: 0.7007819999999999 to ARIMA
-Mean Squared Error (MSE): 1130.4870641529708
-Mean Percentage Error (MPE): -4.004776119013407%
-Absolute Mean Percentage Error (MPE): 12.372263110673023%
-Best Fit Frequency: 23.0%
+Average Weighted Average Ratio: 0.6376000000000001 to ARIMA
+Mean Squared Error (MSE): 163.50690956672756
+Mean Percentage Error (MPE): -4.184522671148871%
+Absolute Mean Percentage Error (MPE): 7.830032061614044%
+Best Fit Frequency: 25.0%

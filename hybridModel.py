@@ -19,9 +19,9 @@ def wa_hybrid_model_test(arima, lstm, test):
 
     return weighted_average_forecast, weighted_avg_ratio
 
-def hybrid_forecast(ticker, forecast_length):
+def hybrid_forecast(ticker, print_csv, forecast_length, sequence_length):
     # Fetch and Clean Data
-    stock_data = fsd.fetch_and_clean(ticker, 'N')
+    stock_data = fsd.fetch_and_clean(ticker, print_csv)
     if stock_data.empty:
         print("Error: This ticker is not supported at this time. Please select a new ticker.")
     elif stock_data.shape[0] <= 12:
@@ -35,7 +35,7 @@ def hybrid_forecast(ticker, forecast_length):
     print("[Loading]: ARIMA Forecast Complete...")
     
     #Construct LSTM Model and Forecast
-    lstm_forecast = lstm.lstm_model_fit(stock_data['Close'], forecast_length)
+    lstm_forecast = lstm.lstm_model_fit(stock_data['Close'], forecast_length, sequence_length)
     if lstm_forecast is None:
         print("Error: Something went wrong in LSTM.") 
     lstm_forecast = pd.Series(lstm_forecast, pd.date_range(start=stock_data.index[-1] + pd.DateOffset(months=1), periods=forecast_length, freq='MS'))
@@ -47,7 +47,7 @@ def hybrid_forecast(ticker, forecast_length):
     sample_arima_forecast = amc.arima_forecast(train, forecast_length)
     if (arima_forecast['Forecast'].isna().any()):
         print("Error: Something went wrong in Hybrid Weight ARIMA.")
-    sample_lstm_forecast = lstm.lstm_model_fit(train, forecast_length)
+    sample_lstm_forecast = lstm.lstm_model_fit(train, forecast_length, sequence_length)
     if lstm_forecast is None:
         print("Error: Something went wrong in Hybrid Weight LSTM.")
     sample_hybrid_forecast, hybrid_weight = wa_hybrid_model_test(sample_arima_forecast, sample_lstm_forecast, test)
