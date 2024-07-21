@@ -3,7 +3,7 @@ import lstm
 
 #Function to find the optimal weights for hybrid model
 def wa_hybrid_model_test(arima, lstm, test, step):
-    least_mpe = 100    
+    least_mpe = 100000000    
     weighted_average_forecast = 0
     weighted_avg_ratio = 0
     for i in range(0, step+1):

@@ -15,7 +15,7 @@ def average(list):
     avg = sum(list)/len(list)
     return avg
 
-def average_measure_fits(forecast_length, test_range, sequence_length=48, batch_size=64, epochs=75, step=100):
+def average_measure_fits(forecast_length, test_range, sequence_length=12, batch_size=64, epochs=75, step=100):
     
     # Initalize Fit Lists
     mses_arima = []
@@ -51,9 +51,12 @@ def average_measure_fits(forecast_length, test_range, sequence_length=48, batch_
         
         # Fetch stock ticker data
         stock_data = fsd.fetch_and_clean(ticker)
-        if stock_data.empty or stock_data.shape[0] <= 12:
+        if stock_data.empty:
             print(f"Deleting {ticker}...")
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
+            continue
+        elif stock_data.shape[0] <= forecast_length*2:
+            print(f"[Warning!]: {ticker} data too short for forecast. Skipping {ticker}...")
             continue
         
         # Split into training and testing data & construct ARIMA forecast
