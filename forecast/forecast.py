@@ -1,15 +1,12 @@
-import arimaModelConstruction as amc
-import lstm
-import hybridModel as hm
-import plot
-import output
+from forecast.models import arima, lstm, hybrid
+from ioprocessing import plot, output
 import pandas as pd
 
-def forecast(ticker, stock_data, forecast_length, sequence_length=48, batch_size=64, epochs=75, step=100):
+def forecast(ticker, stock_data, forecast_length, sequence_length=12, batch_size=64, epochs=75, step=100):
     print("[Loading]: Stock Data Recieved...")
     
     # Construct ARIMA Model and Forecast
-    arima_forecast = amc.arima_forecast(stock_data["Close"], forecast_length)
+    arima_forecast = arima.arima_forecast(stock_data["Close"], forecast_length)
     if (arima_forecast['Forecast'].isna().any()):
         print("Error: Something went wrong in ARIMA.")
     print("[Loading]: ARIMA Forecast Complete...")
@@ -22,7 +19,7 @@ def forecast(ticker, stock_data, forecast_length, sequence_length=48, batch_size
     print("[Loading]: LSTM Forecast Complete...")
     
     #Construct Hybrid Forecast
-    hybrid_forecast = hm.hybrid_forecast(stock_data, forecast_length, arima_forecast, lstm_forecast, sequence_length, batch_size, epochs, step)
+    hybrid_forecast = hybrid.hybrid_forecast(stock_data, forecast_length, arima_forecast, lstm_forecast, sequence_length, batch_size, epochs, step)
     if lstm_forecast is None:
         print("Error: Something went wrong in Hybrid Forecast.") 
     print("[Loading]: Hybrid Forecast Complete...")

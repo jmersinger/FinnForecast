@@ -1,5 +1,4 @@
-import arimaModelConstruction as amc
-import lstm
+from forecast.models import arima as arima_model, lstm as lstm_model
 
 #Function to find the optimal weights for hybrid model
 def wa_hybrid_model_test(arima, lstm, test, step):
@@ -9,7 +8,7 @@ def wa_hybrid_model_test(arima, lstm, test, step):
     for i in range(0, step+1):
         ratio = i / step
         test_ratio = ratio * arima['Forecast'] + (1-ratio) * lstm
-        mse_test, mpe_test = amc.test_fit(test_ratio, test)
+        mse_test, mpe_test = arima_model.test_fit(test_ratio, test)
         
         if (abs(mpe_test) < abs(least_mpe)):
             least_mpe = mpe_test
@@ -21,11 +20,11 @@ def wa_hybrid_model_test(arima, lstm, test, step):
 def hybrid_forecast(stock_data, forecast_length, arima_forecast, lstm_forecast, sequence_length, batch_size, epochs, step):
     #Calculate Optimized Hybrid Weights
     test_length = int(forecast_length/2)
-    train, test = amc.split_training_data(stock_data, test_length)
-    sample_arima_forecast = amc.arima_forecast(train, test_length)
+    train, test = arima_model.split_training_data(stock_data, test_length)
+    sample_arima_forecast = arima_model.arima_forecast(train, test_length)
     if (arima_forecast['Forecast'].isna().any()):
         print("Error: Something went wrong in Hybrid Weight ARIMA.")
-    sample_lstm_forecast = lstm.lstm_model_fit(train, test_length, sequence_length, batch_size, epochs)
+    sample_lstm_forecast = lstm_model.lstm_model_fit(train, test_length, sequence_length, batch_size, epochs)
     if lstm_forecast is None:
         print("Error: Something went wrong in Hybrid Weight LSTM.")
     sample_hybrid_forecast, hybrid_weight = wa_hybrid_model_test(sample_arima_forecast, sample_lstm_forecast, test, step)

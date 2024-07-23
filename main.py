@@ -1,7 +1,6 @@
-import params
-import testAvgMPE as test
-import forecast
-
+from ioprocessing import params
+from tests import testAvgMPE as test
+from forecast import forecast
 
 def main():
     print('\n')
@@ -24,7 +23,7 @@ def main():
         print("===============================")
         valid_input = False
         while valid_input == False:
-            mode = input("Please select an option (1-5): ")
+            mode = input("Please select an option (1-7): ")
             try:
                 mode = int(mode)
             except ValueError:
@@ -71,7 +70,7 @@ def main():
                 
             ###Advanced Test###
             elif mode == 4:
-                print("Okay, lets run a simple test.")
+                print("Okay, lets run an advanced test.")
                 print("If you change your mind, just enter 'cancel' at any time to return to the menu.")
                 forecast_length, test_range = params.get_simple_test_params()
                 if params.check_cancel(forecast_length, test_range): 

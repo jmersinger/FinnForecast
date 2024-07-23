@@ -34,10 +34,11 @@ def lstm_model_fit(data, forecast_length, sequence_length, batch_size, epochs):
     ])
 
     model.compile(optimizer='adam', loss='mean_squared_error')
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10, restore_best_weights=True)
 
     # Train LSTM model
     try:
-        model.fit(X, y, epochs=epochs, batch_size=batch_size, verbose=0)
+        model.fit(X, y, epochs=epochs, batch_size=batch_size, callbacks=[early_stopping], verbose=0)
     except ValueError as ve:
         print(f"ValueError during model training: {ve}")
         return None

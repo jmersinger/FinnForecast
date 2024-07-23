@@ -1,7 +1,8 @@
 from pmdarima import auto_arima
 from pmdarima.model_selection import train_test_split
-import pandas as pd
 from sklearn.metrics import mean_squared_error
+import pandas as pd
+
 
 def split_training_data(data, forecast_length):
     train, test = train_test_split(data['Close'], train_size=(int(data.shape[0]-forecast_length)))
@@ -31,9 +32,6 @@ def arima_forecast(data, forecast_length):
         'Lower': conf_int[:, 0], 
         'Upper': conf_int[:, 1]
     }, index=forecast_index)
-    
-    forecast_csv_filename = "arima_forecast.csv"
-    forecast_df.to_csv(forecast_csv_filename)
     
     return forecast_df
 

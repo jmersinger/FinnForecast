@@ -1,8 +1,6 @@
-import fetchStockData as fsd
-import arimaModelConstruction as amc
-import lstm
-import hybridModel as hm
-import output
+from ioprocessing import fetchStockData as fsd, output
+from forecast.models import arima, lstm, hybrid
+from tests.prophet_test import create_prophet_forecast
 import pandas as pd
 
 def calculate_averages(mse_list, mpe_list):
@@ -60,8 +58,8 @@ def average_measure_fits(forecast_length, test_range, sequence_length=12, batch_
             continue
         
         # Split into training and testing data & construct ARIMA forecast
-        train, test = amc.split_training_data(stock_data, forecast_length)
-        arima_forecast = amc.arima_forecast(train, forecast_length)
+        train, test = arima.split_training_data(stock_data, forecast_length)
+        arima_forecast = arima.arima_forecast(train, forecast_length)
         if (arima_forecast['Forecast'].isna().any()):
             fsd.delete_record(yfin_stocks, 'Ticker', ticker, 'stockTickers.csv')
             continue
@@ -76,12 +74,12 @@ def average_measure_fits(forecast_length, test_range, sequence_length=12, batch_
 
 
         #Calculate minimzed mpe Hybrid Forecast
-        hybrid_forecast, hybrid_ratio = hm.wa_hybrid_model_test(arima_forecast, lstm_forecast, test, step)
+        hybrid_forecast, hybrid_ratio = hybrid.wa_hybrid_model_test(arima_forecast, lstm_forecast, test, step)
         
         #Calculate and validate Measures of fit
-        mse_arima, mpe_arima = amc.test_fit(arima_forecast['Forecast'], test)
-        mse_lstm, mpe_lstm = amc.test_fit(lstm_forecast, test)
-        mse_hybrid, mpe_hybrid = amc.test_fit(hybrid_forecast, test)
+        mse_arima, mpe_arima = arima.test_fit(arima_forecast['Forecast'], test)
+        mse_lstm, mpe_lstm = arima.test_fit(lstm_forecast, test)
+        mse_hybrid, mpe_hybrid = arima.test_fit(hybrid_forecast, test)
         
         if (
             mse_arima is not None and 
@@ -125,9 +123,9 @@ def average_measure_fits(forecast_length, test_range, sequence_length=12, batch_
     
     avg_hybrid_ratio = average(hybrid_ratios)
     
-    bff_arima = (len(bffs_arima)/test_range) * 100
-    bff_lstm = (len(bffs_lstm)/test_range) * 100
-    bff_hybrid = (len(bffs_hybrid)/test_range) * 100
+    bff_arima = (len(bffs_arima)/(len(bffs_arima)+len(bffs_lstm)+len(bffs_hybrid))) * 100
+    bff_lstm = (len(bffs_lstm)/(len(bffs_arima)+len(bffs_lstm)+len(bffs_hybrid))) * 100
+    bff_hybrid = (len(bffs_hybrid)/(len(bffs_arima)+len(bffs_lstm)+len(bffs_hybrid))) * 100
     
     #print to file
     path = output.test_output(avg_mse_arima, avg_mpe_arima, abs_avg_mpe_arima, bff_arima, avg_mse_lstm, avg_mpe_lstm, abs_avg_mpe_lstm, bff_lstm, avg_hybrid_ratio, avg_mse_hybrid, avg_mpe_hybrid, abs_avg_mpe_hybrid, bff_hybrid)
@@ -156,3 +154,4 @@ def average_measure_fits(forecast_length, test_range, sequence_length=12, batch_
     # print(f"Absolute Mean Percentage Error (MPE): {abs_avg_mpe_hybrid}%")
     # print(f"Best Fit Frequency: {bff_hybrid}%")
     # print("\n")
+    

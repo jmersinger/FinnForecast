@@ -1,4 +1,4 @@
-import fetchStockData as fsd
+from ioprocessing import fetchStockData as fsd
 
 ### Function to check if user wants to cancel mode selection ###
 def check_cancel(var1=0, var2=0, var3=0, var4=0, var5=0, var6=0, var7=0):
