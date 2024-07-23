@@ -1,6 +1,5 @@
 from ioprocessing import fetchStockData as fsd, output
 from forecast.models import arima, lstm, hybrid
-from tests.prophet_test import create_prophet_forecast
 import pandas as pd
 
 def calculate_averages(mse_list, mpe_list):
