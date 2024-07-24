@@ -133,10 +133,10 @@ The MA component models the relationship between the current observation and the
 The arima.py file contains several function for use in the ARIMA model and other programs. The main use of this file is to pass stock data and a forecast length into it to get an ARIMA forecast for use in the hybrid model. This ARIMA forecast is achieved using the <i>pmdarima</i> library, specifically the auto_arima function, which automatically selects the best parameters for the AR lags, differencing, and the MA lags. 
 
 <h3>Long Short-Term Memory (LSTM) Model: lstm.py</h3>
-Long Short-Term Memory is a type of Recurrent Neural Network (RNN) that is particularly suited for sequences of data, especially where the model needs to remember information for extended periods, such as Time-Series data, among other subjects. For the sake of simplicity, I will not explain the full theory and mathematics behind LSTMs, but if you are interested in learning more, please check out the following links:
-Wikipedia: https://en.wikipedia.org/wiki/Long_short-term_memory<br>
-Machine Learning Mastery: https://machinelearningmastery.com/gentle-introduction-long-short-term-memory-networks-experts/<br>
-Towards Data Science: https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21<br>
+Long Short-Term Memory is a type of Recurrent Neural Network (RNN) that is particularly suited for sequences of data, especially where the model needs to remember information for extended periods, such as Time-Series data, among other subjects. For the sake of simplicity, I will not explain the full theory and mathematics behind LSTMs, but if you are interested in learning more, please check out the following links:<br>
+   - Wikipedia: https://en.wikipedia.org/wiki/Long_short-term_memory<br>
+   - Machine Learning Mastery: https://machinelearningmastery.com/gentle-introduction-long-short-term-memory-networks-experts/<br>
+   - Towards Data Science: https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21<br>
 
 <h3>The Hybrid Model: hybrid.py</h3>
 The hybrid model in FinnForecast utilizes a weighted average approach toward integrating the ARIMA forecast with the LSTM forecast. In other words, the forecasts are combined with the following formula:
@@ -153,13 +153,21 @@ To select the hybrid weights, x and y, the model iterates through possible value
 To find the actual values <i>Y</i> for the forecast, the model runs a test forecast. Essentially, the stock data is split into two series, <i>train</i> and <i>test</i>, where <i>train</i> represents the values used to train the test forecasts, and <i>test</i> represents the values for <i>Y</i> when calculating aMPE. The model then iterates through the weighted average formula for the test ARIMA and LSTM forecasts, checking the aMPE for each weight. The model then selects the weights with the smallest aMPE and applies them to the real forecast for a final Hybrid Forecast. 
 
 <h3>Model Testing: testAvgMPE.py</h3>
-FinnForecast also features the option to run a test of the model. For the model test, the program runs through a .csv of stocks, located in the root, 'stockTickers.csv', creating test forecasts and calculating the aMPE of each stock. These test forecasts are similar to the test forecasts used to calculate the optimal hybrid weights. After running through all the stocks the user selected, from stockTickers.csv, the program fins the average aMPE across all forecasts of the ARIMA, LSTM, and Hybrid models. The program also finds the frequency that each model had the lowest aMPE for each stock.<br>
+FinnForecast also features the option to run a test of the model. For the model test, the program runs through a .csv of stocks, located in the root, 'stockTickers.csv', creating test forecasts and calculating the aMPE of each stock. These test forecasts are similar to the test forecasts used to calculate the optimal hybrid weights. After running through all the stocks the user selected, from stockTickers.csv, the program finds the average aMPE across all forecasts of the ARIMA, LSTM, and Hybrid models. The program also finds the frequency that each model had the lowest aMPE for each stock.<br>
 It should be noted that the Hybrid model is designed to always return the weights with the lowest aMPE among ARIMA, LSTM, and Hybrid (represented in weights of 0 or 1 if ARIMA or LSTM return the lowest aMPE). The model test accounts for this by marking ARIMA or LSTM as the best forecast in the case that the Hybrid model has greater than or equal aMPE. 
 
 
 ## :chart_with_upwards_trend: Results
 As a final test of the model, I ran simple, 36-month tests of all the stock components of the S&P 500 index and the Russel 1000 index. Here are the results:
 
+<h3>S&P 500:<br></h3>
+<p align="center"><img src="./tests/index_tests/sp500.png" title="sp500" alt="sp500" height="500"/></p>
+
+<h3>Russell 1000:<br></h3>
+<p align="center"><img src="./tests/index_tests/russell.png" title="sp500" alt="sp500" height="500"/></p>
+
+<h3>Conclusions</h3>
+On average, the ARIMA model made the best forecast ~53-55% of the time, the LSTM model made the best forecast ~26-27% of the time, and the Hybrid mode <i>improved</i> the forescast ~18-20% of the time. I say "improved" because the Hybrid model is designed to output the best forecast of the 3 models 100% of the time, but in these tests, the Best Fit Frequency for Hybrid shows when the optimal forecast lies somewhere between the ARIMA and LSTM, which is calculated by the weighted average function. The improvement from the Hybrid model is shown by the aMPE, which is around 29% and 33% for the S&P and Russell indices. These are lower than all the results for ARIMA and LSTM. These results show the goals of the hybrid model, which is to return the optimal forecast everytime, and improve the forecast when able. 
 
 ## :computer: Languages, Frameworks, and Tools
 <div>
