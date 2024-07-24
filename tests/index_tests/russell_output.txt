@@ -1,0 +1,20 @@
+ARIMA Model Fit:
+Mean Squared Error (MSE): 18920.319897780708
+Mean Percentage Error (MPE): -30.32888911618189%
+Absolute Mean Percentage Error (MPE): 41.62032956387231%
+Best Fit Frequency: 52.774631936579844%
+
+
+LSTM Model Fit:
+Mean Squared Error (MSE): 58526.81681327734
+Mean Percentage Error (MPE): -46.72769902056783%
+Absolute Mean Percentage Error (MPE): 64.97499494785166%
+Best Fit Frequency: 27.293318233295583%
+
+
+Hybrid Model Fit:
+Average Weighted Average Ratio: 0.6383352208380523 to ARIMA
+Mean Squared Error (MSE): 15343.320263748681
+Mean Percentage Error (MPE): -25.9588334024076%
+Absolute Mean Percentage Error (MPE): 33.641513548990716%
+Best Fit Frequency: 19.932049830124576%
